@@ -8,10 +8,13 @@
 <INPUT TYPE="file" NAME="configFileUp1" id="configFileUp1">
 <P/>
   Please select the BIG-IP configuration file to upload (e.g. bigip.conf):
-<P/>
+<BR/>
 <INPUT TYPE="file" NAME="configFileUp2" id="configFileUp2">
 <BR/>
+<P/>
+  Please select the BIG-IP script configuration file to upload (e.g. bigip_script.conf):
 <BR/>
+<INPUT TYPE="file" NAME="configFileUp3" id="configFileUp3">
 <P/>
 </HEADER>
 <SECTION>
