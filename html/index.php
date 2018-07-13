@@ -1,7 +1,7 @@
 <HTML>
 <BODY>
 <HEADER>
-  <H1>BIG-IP Configchecker v.001 (c) 2018 Rachel Cheng</H1>
+  <H1>BIG-IP Transmigrator v.001 (c) 2018 Rachel Cheng</H1>
 <FORM ACTION="upload.php" METHOD="POST" ENCTYPE="multipart/form-data">
   Please select the BIG-IP base configuration file to upload (e.g. bigip_base.conf):
 <BR/>

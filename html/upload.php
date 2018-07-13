@@ -1,5 +1,5 @@
 <?php
-$target_dir = "/config/";
+$target_dir = "/config";
 $target_file1 = $target_dir . basename($_FILES["configFileUp1"]["name"]);
 $target_file2 = $target_dir . basename($_FILES["configFileUp2"]["name"]);
 $target_file3 = $target_dir . basename($_FILES["configFileUp3"]["name"]);
@@ -39,6 +39,8 @@ if(isset($_POST["submit"])) {
     }
 }
 if ($uploadOk) {
+	$ipAddrPort = "192.241.206.243:8080";
+	$ackString = "GET /\n";
 	$bigBase = $target_dir . "bigip_base.conf";
 	$bigConf = $target_dir . "bigip.conf";
 	$bigScript = $target_dir. "bigip_script.conf";
@@ -49,7 +51,17 @@ if ($uploadOk) {
 	file_put_contents($bigConf, $fileOut2);
 	file_put_contents($bigScript, $fileOut3);
 	//$output = shell_exec('ls -lart');
-	$output = shell_exec('/usr/bin/tmsh -m load sys config platform-migrate');
+	//$output = shell_exec('/usr/bin/tmsh -m load sys config platform-migrate');
+	//Can't execute a shell in a seperate container, so hacking a socket connector to netcat
+	$stream = stream_socket_client("tcp://".$ipAddrPort, $errno, $errstr);
+	if (!$stream) {
+		echo "{$errno}: {$errstr}\n";
+		die();
+	}
+	fwrite($stream, $ackString);
+	stream_socket_shutdown($stream, STREAM_SHUT_WR); /* close stream, flush buffer*/
+	$output = stream_get_contents($stream);
+	fclose($stream);
 	echo "<pre>$output</pre>";
 } else {
 	echo "Please <A HREF=\"" . $_SERVER["HTTP_REFERER"] . "\">return to the prior page</A> and try again.";
