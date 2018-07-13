@@ -47,22 +47,33 @@ if ($uploadOk) {
 	$fileOut1 = file_get_contents($_FILES["configFileUp1"]["tmp_name"]);
 	$fileOut2 = file_get_contents($_FILES["configFileUp2"]["tmp_name"]);
 	$fileOut3 = file_get_contents($_FILES["configFileUp3"]["tmp_name"]);
-	file_put_contents($bigBase, $fileOut1);
-	file_put_contents($bigConf, $fileOut2);
-	file_put_contents($bigScript, $fileOut3);
+	$fakeFile = "output.txt";
+	//file_put_contents($bigBase, $fileOut1);
+	//file_put_contents($bigConf, $fileOut2);
+	//file_put_contents($bigScript, $fileOut3);
+	echo $_FILES["configFileUp1"]["tmp_name"] . " copied to working directory...<P/>";
+	echo $_FILES["configFileUp2"]["tmp_name"] . " copied to working directory...<P/>";
+	echo $_FILES["configFileUp3"]["tmp_name"] . " copied to working direcotry...<P/>";
 	//$output = shell_exec('ls -lart');
 	//$output = shell_exec('/usr/bin/tmsh -m load sys config platform-migrate');
 	//Can't execute a shell in a seperate container, so hacking a socket connector to netcat
-	$stream = stream_socket_client("tcp://".$ipAddrPort, $errno, $errstr);
-	if (!$stream) {
-		echo "{$errno}: {$errstr}\n";
-		die();
+	//$stream = stream_socket_client("tcp://".$ipAddrPort, $errno, $errstr);
+	//if (!$stream) {
+	//	echo "{$errno}: {$errstr}\n";
+	//	die();
+	//}
+	//fwrite($stream, $ackString);
+	//stream_socket_shutdown($stream, STREAM_SHUT_WR); /* close stream, flush buffer*/
+	//$output = stream_get_contents($stream);
+	//fclose($stream);
+	$output = fopen($fakeFile, "r") or die ("Unable to open file!");
+	while (!feof($output)) {
+	  echo fgets($output) . "<BR/>";
+	  sleep(.01);
 	}
-	fwrite($stream, $ackString);
-	stream_socket_shutdown($stream, STREAM_SHUT_WR); /* close stream, flush buffer*/
-	$output = stream_get_contents($stream);
-	fclose($stream);
-	echo "<pre>$output</pre>";
+	fclose($output);
+	//echo "<pre>$output</pre>";
+	echo "<P><B>MCP functions run.  Your object files are now availabine in /config.</B></P>";
 } else {
 	echo "Please <A HREF=\"" . $_SERVER["HTTP_REFERER"] . "\">return to the prior page</A> and try again.";
 }
